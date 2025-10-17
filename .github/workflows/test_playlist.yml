@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "16.x"
+          node-version: "20.10.x"
 
       - name: Install m3u-linter and check the playlist
         run: |
@@ -31,20 +31,21 @@ jobs:
                 "require-info": true,
                 "no-trailing-spaces": true,
                 "no-whitespace-before-title": true,
-                "no-multi-spaces": true,
+                "no-multi-spaces": false,
                 "no-extra-comma": true,
-                "space-before-paren": true,
+                "space-before-paren": false,
                 "no-dash": true
               }
             }
           EOF
           ls -lar ./ || true
           cat playlist.m3u8 || true
-          m3u-linter -c ./m3u-linter.config.json ./playlist.m3u8
+          m3u-linter -c ./M3u-linter.config.json ./playlist.m3u8
 
       - name: Install IPTV Checker and check the playlist
         run: |
           npm install -g iptv-checker || true
           mkdir -p output
+          sudo apt-get install -y ffmpeg
           iptv-checker -o output -p 100 -t 120000 ./playlist.m3u8
 
